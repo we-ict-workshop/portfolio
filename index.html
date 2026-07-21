@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shaikh Prothomaa Binte Minhaz — CS Researcher</title>
+<meta name="description" content="Portfolio of Shaikh Prothomaa Binte Minhaz — HCI, Explainable AI &amp; Bioinformatics researcher, BUET.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   DESIGN TOKENS
+   ========================================================= */
+:root {
+  /* Canvas */
+  --canvas: #ffffff;
+  --canvas-soft: #f6f8ff;
+
+  /* Ink (deep slate, never pure black) */
+  --ink: #171b2e;
+  --ink-soft: #4c5372;
+  --ink-faint: #8a90ac;
+
+  /* Bright, lively accents */
+  --blue: #2f5bff;
+  --blue-deep: #1c3fd6;
+  --cyan: #00d9e8;
+  --pink: #ff3d8a;
+  --orange: #ff7a45;
+
+  --line: #e6e9fb;
+  --card-bg: #ffffff;
+  --canvas-soft-solid: #f6f8ff;
+
+  --gradient-primary: linear-gradient(120deg, var(--blue) 0%, var(--pink) 65%, var(--orange) 100%);
+  --gradient-cool: linear-gradient(120deg, var(--cyan) 0%, var(--blue) 100%);
+  --gradient-text: linear-gradient(120deg, var(--blue) 0%, var(--pink) 100%);
+
+  --shadow-sm: 0 2px 10px rgba(23, 27, 46, 0.06);
+  --shadow-md: 0 12px 32px rgba(47, 91, 255, 0.12);
+  --shadow-lg: 0 24px 60px rgba(23, 27, 46, 0.14);
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* =========================================================
+   RESET / BASE
+   ========================================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--canvas);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+.container {
+  width: min(1140px, 92%);
+  margin-inline: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================
+   FULL-PAGE PARTICLE LAYER
+   A fixed canvas of soft, glowing particles drifting across the
+   entire page — sits above the white canvas and section content,
+   below the nav — decorative only (pointer-events: none).
+   ========================================================= */
+.particles-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 40;
+  pointer-events: none;
+}
+
+/* =========================================================
+   SCROLL PROGRESS BAR
+   ========================================================= */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 1000;
+  background: transparent;
+}
+.scroll-progress span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--gradient-primary);
+  transition: width 0.1s linear;
+}
+
+/* =========================================================
+   NAV
+   ========================================================= */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  padding: 18px 0;
+  transition: background 0.35s var(--ease), box-shadow 0.35s var(--ease), padding 0.35s var(--ease);
+}
+.nav.scrolled {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px) saturate(160%);
+  box-shadow: 0 1px 0 var(--line);
+  padding: 12px 0;
+}
+.nav-inner {
+  width: min(1200px, 92%);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+}
+.nav-brand .dot { color: var(--pink); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+.nav-links a:not(.nav-cta) {
+  position: relative;
+  color: var(--ink-soft);
+  transition: color 0.25s var(--ease);
+}
+.nav-links a:not(.nav-cta)::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -5px;
+  width: 0; height: 2px;
+  background: var(--gradient-primary);
+  transition: width 0.3s var(--ease);
+}
+.nav-links a:not(.nav-cta):hover { color: var(--ink); }
+.nav-links a:not(.nav-cta):hover::after { width: 100%; }
+.nav-cta {
+  background: var(--ink);
+  color: #fff;
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: transform 0.3s var(--ease), background 0.3s var(--ease);
+}
+.nav-cta:hover { background: var(--blue-deep); transform: translateY(-2px); }
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+.nav-toggle span {
+  width: 24px; height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--canvas);
+}
+.hero-photo {
+  position: absolute; inset: 0;
+  z-index: 0;
+  /* Bright nature-toned fallback (sky → meadow) shown until a real photo is added */
+  background: linear-gradient(180deg, #d7ecff 0%, #eaf7ee 55%, #ffffff 100%);
+}
+.hero-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.92;
+  filter: saturate(1.08) brightness(1.02);
+}
+.hero-photo.photo-fallback img { display: none; }
+.hero-overlay {
+  position: absolute; inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 70% 55% at 12% 18%, rgba(255, 255, 255, 0.55), transparent 60%),
+    radial-gradient(ellipse 60% 55% at 92% 85%, rgba(255, 61, 138, 0.14), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.15) 40%, rgba(255, 255, 255, 0.55) 100%);
+}
+.hero-fade {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 22%;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--canvas) 100%);
+}
+.hero-content {
+  position: relative;
+  z-index: 3;
+  width: min(900px, 92%);
+  margin-inline: auto;
+  padding-top: 90px;
+  color: var(--ink);
+}
+.hero .eyebrow { color: var(--blue-deep); }
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  margin: 16px 0 20px;
+  color: var(--ink);
+  text-shadow: 0 2px 24px rgba(255, 255, 255, 0.6);
+}
+.hero-tagline {
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  color: var(--ink-soft);
+  max-width: 640px;
+  line-height: 1.6;
+  margin-bottom: 34px;
+}
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+.hero-tags span {
+  border: 1px solid rgba(23, 27, 46, 0.14);
+  background: rgba(255, 255, 255, 0.6);
+  padding: 6px 14px;
+  border-radius: 999px;
+  color: var(--ink-soft);
+  backdrop-filter: blur(6px);
+}
+
+.scroll-cue {
+  position: absolute;
+  bottom: 34px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: 26px; height: 42px;
+  border: 2px solid rgba(23, 27, 46, 0.25);
+  border-radius: 20px;
+}
+.scroll-cue span {
+  position: absolute;
+  top: 8px; left: 50%;
+  width: 5px; height: 5px;
+  margin-left: -2.5px;
+  background: var(--pink);
+  border-radius: 50%;
+  animation: scrollCue 1.8s ease-in-out infinite;
+}
+@keyframes scrollCue {
+  0% { transform: translateY(0); opacity: 1; }
+  70% { transform: translateY(16px); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 26px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), background 0.3s var(--ease);
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--gradient-primary);
+  color: #fff;
+  box-shadow: var(--shadow-md);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(255, 61, 138, 0.28); }
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink);
+  border: 1px solid rgba(23, 27, 46, 0.16);
+  backdrop-filter: blur(6px);
+}
+.btn-ghost:hover { background: #fff; transform: translateY(-3px); box-shadow: var(--shadow-sm); }
+
+/* =========================================================
+   SECTION LAYOUT
+   ========================================================= */
+.section { padding: 120px 0; position: relative; }
+.section-tint { background: rgba(47, 91, 255, 0.035); }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--blue);
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  letter-spacing: -0.01em;
+  margin-bottom: 46px;
+  max-width: 680px;
+  line-height: 1.18;
+}
+.footer .section-title { margin-bottom: 20px; }
+
+/* =========================================================
+   SCROLL REVEAL
+   ========================================================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.reveal.in-view { opacity: 1; transform: translateY(0); }
+
+/* =========================================================
+   ABOUT
+   ========================================================= */
+.about-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 64px;
+  align-items: center;
+}
+.photo-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-lg);
+}
+.photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+.about-photo.photo-fallback .photo-frame,
+.photo-frame.photo-fallback { display: flex; align-items: center; justify-content: center; }
+.about-photo .photo-frame { transition: transform 0.5s var(--ease); }
+.about-photo:hover .photo-frame { transform: rotate(-1deg) scale(1.02); }
+
+.about-copy p { color: var(--ink-soft); font-size: 1.03rem; line-height: 1.75; margin-bottom: 18px; }
+.about-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 34px;
+  padding-top: 30px;
+  border-top: 1px solid var(--line);
+}
+.stat-num {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.9rem;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.stat-label {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+  margin-top: 4px;
+}
+
+/* =========================================================
+   RESEARCH CARDS
+   ========================================================= */
+.research-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.research-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 30px 26px;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+.research-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: transparent;
+}
+.research-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  font-size: 1.3rem;
+  margin-bottom: 18px;
+  background: linear-gradient(135deg, var(--c1), var(--c2));
+  color: #fff;
+}
+.research-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  margin-bottom: 8px;
+}
+.research-card p { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.55; }
+
+/* =========================================================
+   TIMELINE (Education / Experience)
+   ========================================================= */
+.timeline {
+  position: relative;
+  padding-left: 34px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px; top: 8px; bottom: 8px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--blue), var(--pink));
+  opacity: 0.35;
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 40px;
+}
+.timeline-item:last-child { margin-bottom: 0; }
+.timeline-node {
+  position: absolute;
+  left: -34px; top: 6px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--canvas);
+  border: 3px solid var(--blue);
+  box-shadow: 0 0 0 5px rgba(47, 91, 255, 0.1);
+}
+.timeline-item:nth-child(even) .timeline-node { border-color: var(--pink); box-shadow: 0 0 0 5px rgba(255, 61, 138, 0.1); }
+.timeline-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 28px 30px;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+.timeline-card:hover { transform: translateX(6px); box-shadow: var(--shadow-sm); }
+.timeline-date {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--pink);
+  font-weight: 500;
+}
+.timeline-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin: 8px 0 4px;
+}
+.timeline-org { color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 10px; }
+.timeline-card ul { margin-top: 10px; }
+.timeline-card li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+.timeline-card li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 9px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+}
+
+/* =========================================================
+   PROJECTS
+   ========================================================= */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+}
+.project-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+.project-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+.project-media {
+  aspect-ratio: 16 / 10;
+  background: var(--gradient-cool);
+  overflow: hidden;
+}
+.project-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+.project-card:hover .project-media img { transform: scale(1.06); }
+.project-media.media-fallback { background: var(--gradient-primary); }
+.project-media.media-fallback img { display: none; }
+.project-body { padding: 26px 26px 28px; }
+.project-date {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.project-body h3 {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  margin: 10px 0 10px;
+  line-height: 1.35;
+}
+.project-body p { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.6; margin-bottom: 16px; }
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag-row span {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--canvas-soft);
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+}
+
+/* =========================================================
+   PUBLICATIONS
+   ========================================================= */
+.pub-list { display: flex; flex-direction: column; gap: 16px; }
+.pub-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 26px 30px;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+.pub-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: transparent; }
+.pub-main h3 { font-family: var(--font-display); font-size: 1.05rem; line-height: 1.4; margin-bottom: 8px; }
+.pub-authors { color: var(--ink-soft); font-size: 0.9rem; margin-bottom: 4px; }
+.pub-venue { color: var(--ink-faint); font-size: 0.85rem; font-style: italic; }
+.badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--gradient-primary);
+  color: #fff;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+.pub-links { display: flex; gap: 10px; flex-shrink: 0; }
+.pub-link {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  transition: all 0.3s var(--ease);
+}
+.pub-link:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+/* =========================================================
+   AWARDS / LEADERSHIP
+   ========================================================= */
+.award-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.award-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 32px 30px;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+.award-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+.award-icon { font-size: 1.7rem; display: block; margin-bottom: 14px; }
+.award-card .timeline-date { display: block; margin-bottom: 8px; }
+.award-card h3 { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 10px; line-height: 1.35; }
+.award-card p { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.6; }
+
+/* =========================================================
+   SKILLS
+   ========================================================= */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+.skill-group {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 28px;
+}
+.skill-group h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  margin-bottom: 16px;
+  color: var(--blue-deep);
+}
+.skill-group .tag-row span { transition: all 0.25s var(--ease); }
+.skill-group .tag-row span:hover {
+  background: var(--gradient-primary);
+  color: #fff;
+  border-color: transparent;
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.footer {
+  background: var(--ink);
+  color: #fff;
+  padding: 100px 0 0;
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding-bottom: 70px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.footer .eyebrow { color: var(--cyan); }
+.footer-copy .section-title { color: #fff; }
+.footer-copy p { color: rgba(255, 255, 255, 0.65); max-width: 460px; margin-bottom: 28px; line-height: 1.6; }
+.footer-email { font-family: var(--font-mono); font-size: 0.85rem; }
+.footer-links { display: flex; gap: 26px; font-weight: 500; }
+.footer-links a { color: rgba(255, 255, 255, 0.75); position: relative; }
+.footer-links a:hover { color: var(--cyan); }
+.footer-bottom {
+  text-align: center;
+  padding: 26px 0;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.82rem;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .photo-frame { max-width: 340px; margin-inline: auto; }
+  .research-grid { grid-template-columns: repeat(2, 1fr); }
+  .skills-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 720px) {
+  .nav-links {
+    position: fixed;
+    top: 0; right: 0;
+    height: 100vh;
+    width: min(78vw, 320px);
+    background: #fff;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 26px;
+    padding: 40px;
+    box-shadow: -12px 0 40px rgba(23, 27, 46, 0.12);
+    transform: translateX(100%);
+    transition: transform 0.4s var(--ease);
+  }
+  .nav-links.open { transform: translateX(0); }
+  .nav-toggle { display: flex; }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .research-grid { grid-template-columns: 1fr; }
+  .section { padding: 84px 0; }
+  .pub-item { flex-direction: column; }
+  .footer-inner { align-items: flex-start; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============ FULL-PAGE PARTICLE LAYER ============ -->
+<canvas id="particlesCanvas" class="particles-canvas" aria-hidden="true"></canvas>
+
+<!-- ============ CUSTOM CURSOR / SCROLL PROGRESS ============ -->
+<div class="scroll-progress" aria-hidden="true"><span id="scrollBar"></span></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="siteNav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-brand">SP<span class="dot">.</span>M</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#about" data-nav>About</a>
+      <a href="#research" data-nav>Research</a>
+      <a href="#education" data-nav>Education</a>
+      <a href="#experience" data-nav>Experience</a>
+      <a href="#projects" data-nav>Projects</a>
+      <a href="#publications" data-nav>Publications</a>
+      <a href="#awards" data-nav>Awards</a>
+      <a href="#leadership" data-nav>Leadership</a>
+      <a href="#skills" data-nav>Skills</a>
+      <a href="#contact" class="nav-cta">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="hero-photo">
+    <!-- REPLACE: put a nature/botanical photo at assets/images/hero-bg.jpg
+         (recommended 1920x1080, landscape — sunflower/leaf/garden/sky, something
+         bright and airy). Until you add one, a soft sky-to-meadow gradient shows instead. -->
+    <img src="assets/images/hero-bg.jpg" alt="" id="heroPhoto" onerror="this.closest('.hero-photo').classList.add('photo-fallback')">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-fade"></div>
+
+  <div class="hero-content">
+    <p class="eyebrow reveal" data-reveal>M.Sc. Researcher — BUET, Dhaka</p>
+    <h1 class="hero-title reveal" data-reveal>
+      Shaikh Prothomaa<br>Binte Minhaz
+    </h1>
+    <p class="hero-tagline reveal" data-reveal>
+      I design interpretable systems where humans and machine learning meet —
+      from protein structures to Bangla syntax trees.
+    </p>
+    <div class="hero-actions reveal" data-reveal>
+      <a href="#projects" class="btn btn-primary">View Research</a>
+      <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+    </div>
+    <div class="hero-tags reveal" data-reveal>
+      <span>HCI</span><span>Explainable AI</span><span>Bioinformatics</span><span>Deep Learning</span>
+    </div>
+  </div>
+
+  <a href="#about" class="scroll-cue" aria-label="Scroll to content">
+    <span></span>
+  </a>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="section" id="about">
+  <div class="container about-grid">
+    <div class="about-photo reveal" data-reveal>
+      <!-- REPLACE: portrait photo, square-ish, assets/images/portrait.jpg -->
+      <div class="photo-frame">
+        <img src="assets/images/portrait.jpg" alt="Portrait of Shaikh Prothomaa Binte Minhaz" onerror="this.parentElement.classList.add('photo-fallback')">
+      </div>
+    </div>
+    <div class="about-copy">
+      <p class="eyebrow reveal" data-reveal>About</p>
+      <h2 class="section-title reveal" data-reveal>Curious about how people and models understand each other.</h2>
+      <p class="reveal" data-reveal>
+        I'm a Teaching Assistant and M.Sc. student in Computer Science and Engineering at the
+        Bangladesh University of Engineering and Technology (BUET), currently working on my thesis.
+        My work sits at the intersection of Human&ndash;Computer Interaction and Explainable AI —
+        I build interfaces and models that stay understandable even as they get more complex,
+        whether that's a protein structure predictor, a mobile eye-disease classifier, or a parser
+        for low-resource languages like Bangla.
+      </p>
+      <p class="reveal" data-reveal>
+        I completed my B.Sc. in Computer Science &amp; Engineering at Khulna University of Engineering
+        &amp; Technology (KUET), where my thesis on Bangla dependency parsing became my first
+        first-author publication. Since then I've published across HCI, NLP, medical imaging and
+        software engineering venues, and I still enjoy the moment a messy dataset turns into a
+        working system someone can actually trust.
+      </p>
+      <div class="about-stats reveal" data-reveal>
+        <div><span class="stat-num">5</span><span class="stat-label">Publications</span></div>
+        <div><span class="stat-num">3.17</span><span class="stat-label">M.Sc. GPA</span></div>
+        <div><span class="stat-num">Top 2%</span><span class="stat-label">ICCIT 2025 Paper</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESEARCH INTERESTS ============ -->
+<section class="section section-tint" id="research">
+  <div class="container">
+    <p class="eyebrow reveal" data-reveal>Research Interests</p>
+    <h2 class="section-title reveal" data-reveal>Where I like to work</h2>
+
+    <div class="research-grid">
+      <div class="research-card reveal" data-reveal>
+        <span class="research-icon" style="--c1:var(--blue);--c2:var(--cyan)">◈</span>
+        <h3>Human&ndash;Computer Interaction</h3>
+        <p>Designing interfaces that make complex model output legible to real users.</p>
+      </div>
+      <div class="research-card reveal" data-reveal>
+        <span class="research-icon" style="--c1:var(--pink);--c2:var(--orange)">✳</span>
+        <h3>Explainable AI</h3>
+        <p>Opening the black box — interpretable predictions people can actually act on.</p>
+      </div>
+      <div class="research-card reveal" data-reveal>
+        <span class="research-icon" style="--c1:var(--cyan);--c2:var(--blue)">◆</span>
+        <h3>Machine Learning</h3>
+        <p>Ensemble methods and feature engineering for messy, real-world data.</p>
+      </div>
+      <div class="research-card reveal" data-reveal>
+        <span class="research-icon" style="--c1:var(--orange);--c2:var(--pink)">⬢</span>
+        <h3>Deep Learning</h3>
+        <p>CNNs, GANs and sequence models applied to imaging and language.</p>
+      </div>
+      <div class="research-card reveal" data-reveal>
+        <span class="research-icon" style="--c1:var(--blue);--c2:var(--pink)">⬡</span>
+        <h3>Bioinformatics</h3>
+        <p>Computational methods for biological structure and sequence data.</p>
+      </div>
+      <div class="research-card reveal" data-reveal>
+        <span class="research-icon" style="--c1:var(--cyan);--c2:var(--orange)">◉</span>
+        <h3>Protein Structure Prediction</h3>
+        <p>Interactive tools for predicting and interpreting protein structures.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EDUCATION ============ -->
+<section class="section" id="education">
+  <div class="container">
+    <p class="eyebrow reveal" data-reveal>Education</p>
+    <h2 class="section-title reveal" data-reveal>Academic path</h2>
+
+    <div class="timeline">
+      <div class="timeline-item reveal" data-reveal>
+        <div class="timeline-node"></div>
+        <div class="timeline-card">
+          <span class="timeline-date">April 2024 — Present</span>
+          <h3>M.Sc. Engg. in Computer Science &amp; Engineering</h3>
+          <p class="timeline-org">Bangladesh University of Engineering and Technology, Dhaka</p>
+          <p>Cumulative GPA: 3.17 / 4.00 &nbsp;·&nbsp; Thesis in progress</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal" data-reveal>
+        <div class="timeline-node"></div>
+        <div class="timeline-card">
+          <span class="timeline-date">January 2019 — March 2024</span>
+          <h3>B.Sc. Engg. in Computer Science &amp; Engineering</h3>
+          <p class="timeline-org">Khulna University of Engineering &amp; Technology</p>
+          <p>Cumulative GPA: 3.56 / 4.00 &nbsp;·&nbsp; Thesis: Dependency Parsing for Bangla Text</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPERIENCE ============ -->
+<section class="section section-tint" id="experience">
+  <div class="container">
+    <p class="eyebrow reveal" data-reveal>Experience</p>
+    <h2 class="section-title reveal" data-reveal>Where I've worked</h2>
+
+    <div class="timeline">
+      <div class="timeline-item reveal" data-reveal>
+        <div class="timeline-node"></div>
+        <div class="timeline-card">
+          <span class="timeline-date">January 2026 — Present</span>
+          <h3>Teaching Assistant</h3>
+          <p class="timeline-org">Bangladesh University of Engineering and Technology, Dhaka</p>
+          <ul>
+            <li>Assisted faculty in conducting undergraduate courses — lecture materials, tutorials, programming assignments.</li>
+            <li>Evaluated assignments, quizzes and lab tasks, and gave student feedback.</li>
+            <li>Supported laboratory sessions.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item reveal" data-reveal>
+        <div class="timeline-node"></div>
+        <div class="timeline-card">
+          <span class="timeline-date">July 2025 — September 2025</span>
+          <h3>Intern, IT Department</h3>
+          <p class="timeline-org">Bangladesh Bank, Dhaka</p>
+          <ul>
+            <li>Worked on software development related activities.</li>
+            <li>Collaborated with technical teams.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section class="section" id="projects">
+  <div class="container">
+    <p class="eyebrow reveal" data-reveal>Selected Research Projects</p>
+    <h2 class="section-title reveal" data-reveal>What I've been building</h2>
+
+    <div class="project-grid">
+
+      <article class="project-card reveal" data-reveal>
+        <div class="project-media">
+          <!-- REPLACE: assets/images/project-student-performance.jpg -->
+          <img src="assets/images/project-student-performance.jpg" alt="" onerror="this.parentElement.classList.add('media-fallback')">
+        </div>
+        <div class="project-body">
+          <span class="project-date">December 2024</span>
+          <h3>Analysis &amp; Prediction of Student Performance using ML</h3>
+          <p>Machine learning models predicting academic performance from a Bangladeshi student dataset, using ensemble learning to surface the key drivers.</p>
+          <div class="tag-row"><span>Python</span><span>Scikit-learn</span><span>Pandas</span><span>NumPy</span></div>
+        </div>
+      </article>
+
+      <article class="project-card reveal" data-reveal>
+        <div class="project-media">
+          <!-- REPLACE: assets/images/project-bangla-parsing.jpg -->
+          <img src="assets/images/project-bangla-parsing.jpg" alt="" onerror="this.parentElement.classList.add('media-fallback')">
+        </div>
+        <div class="project-body">
+          <span class="project-date">Aug 2023 — Mar 2024 · B.Sc. Thesis</span>
+          <h3>Dependency Parsing for Bangla Text</h3>
+          <p>A dependency parsing system for Bangla with a Flask-based interactive visualization interface, contributing dataset work to low-resource NLP. Published as first author at IEEE EICT 2025.</p>
+          <div class="tag-row"><span>Python</span><span>Flask</span><span>NLP</span></div>
+        </div>
+      </article>
+
+      <article class="project-card reveal" data-reveal>
+        <div class="project-media">
+          <!-- REPLACE: assets/images/project-ct-mri.jpg -->
+          <img src="assets/images/project-ct-mri.jpg" alt="" onerror="this.parentElement.classList.add('media-fallback')">
+        </div>
+        <div class="project-body">
+          <span class="project-date">Sep — Nov 2025</span>
+          <h3>CT-to-MRI Image Translation Using Clinical Data</h3>
+          <p>A novel hybrid CycleGAN&ndash;Pix2Pix framework translating CT scans into synthetic MRI images, evaluated for image quality and structural consistency.</p>
+          <div class="tag-row"><span>TensorFlow</span><span>CycleGAN</span><span>Pix2Pix</span></div>
+        </div>
+      </article>
+
+      <article class="project-card reveal" data-reveal>
+        <div class="project-media">
+          <!-- REPLACE: assets/images/project-prime-game.jpg -->
+          <img src="assets/images/project-prime-game.jpg" alt="" onerror="this.parentElement.classList.add('media-fallback')">
+        </div>
+        <div class="project-body">
+          <span class="project-date">July 2023</span>
+          <h3>Never Be a Prime — Game</h3>
+          <p>A two-player strategy game built around prime number generation, with an AI opponent driven by game-search and heuristic evaluation.</p>
+          <div class="tag-row"><span>Python</span><span>PyCharm</span><span>Game AI</span></div>
+        </div>
+      </article>
+
+      <article class="project-card reveal" data-reveal>
+        <div class="project-media">
+          <!-- REPLACE: assets/images/project-blind-stick.jpg -->
+          <img src="assets/images/project-blind-stick.jpg" alt="" onerror="this.parentElement.classList.add('media-fallback')">
+        </div>
+        <div class="project-body">
+          <span class="project-date">August 2023</span>
+          <h3>Blind Stick Project</h3>
+          <p>An assistive navigation device for visually impaired users, combining ultrasonic sensing and GSM communication for obstacle detection and emergency alerts.</p>
+          <div class="tag-row"><span>Arduino</span><span>C++</span><span>IR Sensors</span></div>
+        </div>
+      </article>
+
+      <article class="project-card reveal" data-reveal>
+        <div class="project-media">
+          <!-- REPLACE: assets/images/project-graphics.jpg -->
+          <img src="assets/images/project-graphics.jpg" alt="" onerror="this.parentElement.classList.add('media-fallback')">
+        </div>
+        <div class="project-body">
+          <span class="project-date">August 2023</span>
+          <h3>Graphics School Project</h3>
+          <p>An interactive 3D model of a government school in OpenGL, with animated objects, lighting and user interaction built from first principles.</p>
+          <div class="tag-row"><span>OpenGL 3.3</span><span>C++</span></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ PUBLICATIONS ============ -->
+<section class="section section-tint" id="publications">
+  <div class="container">
+    <p class="eyebrow reveal" data-reveal>Publications</p>
+    <h2 class="section-title reveal" data-reveal>Peer-reviewed work</h2>
+
+    <ul class="pub-list">
+      <li class="pub-item reveal" data-reveal>
+        <div class="pub-main">
+          <h3>ProInteract: An Interactive Framework for Protein Structure Prediction with Enhanced Usability and Interpretation</h3>
+          <p class="pub-authors">Shaikh Prothomaa Binte Minhaz, Tasnia Haque Kheya, Sadia Sharmin</p>
+          <p class="pub-venue">Human&ndash;Computer Interaction International (HCII 2026) · Lecture Notes in Computer Science, vol. 16746, Springer, 2026</p>
+        </div>
+        <div class="pub-links"><a href="#" class="pub-link">DOI</a><a href="#" class="pub-link">PDF</a></div>
+      </li>
+
+      <li class="pub-item reveal" data-reveal>
+        <div class="pub-main">
+          <h3>Protonic: An Interactive Interface for Protein Structure Prediction with Enhanced Usability and Interpretation</h3>
+          <p class="pub-authors">Shaikh Prothomaa Binte Minhaz, Tasnia Haque Kheya</p>
+          <p class="pub-venue">2025 IEEE International Women in Engineering (WIE) Conference on Electrical and Computer Engineering (WIECON-ECE)</p>
+        </div>
+        <div class="pub-links"><a href="#" class="pub-link">DOI</a><a href="#" class="pub-link">PDF</a></div>
+      </li>
+
+      <li class="pub-item reveal" data-reveal>
+        <div class="pub-main">
+          <h3>Bangla Syntax Annotation: A Data-Driven Approach to Bangla Dependency Parsing with a Treebank</h3>
+          <p class="pub-authors">Shaikh Prothomaa Binte Minhaz, KM Azharul Hasan</p>
+          <p class="pub-venue">2025 7th International Conference on Electrical Information and Communication Technology (EICT)</p>
+        </div>
+        <div class="pub-links"><a href="#" class="pub-link">DOI</a><a href="#" class="pub-link">PDF</a></div>
+      </li>
+
+      <li class="pub-item reveal" data-reveal>
+        <div class="pub-main">
+          <h3>CodeScent: A Deep Ensemble and LLM-Based Framework for Python and Java Code Smell Detection with Android Integration <span class="badge">Top 2% Paper</span></h3>
+          <p class="pub-authors">Tasnia Haque Kheya, Shaikh Prothomaa Binte Minhaz</p>
+          <p class="pub-venue">2025 28th International Conference on Computer and Information Technology (ICCIT)</p>
+        </div>
+        <div class="pub-links"><a href="#" class="pub-link">DOI</a><a href="#" class="pub-link">PDF</a></div>
+      </li>
+
+      <li class="pub-item reveal" data-reveal>
+        <div class="pub-main">
+          <h3>OcuXAI-App: A Deep Learning Based Mobile Application for Eye Disease Classification Using Ensemble Technique with Enhanced Interpretability</h3>
+          <p class="pub-authors">Tasnia Haque Kheya, Shaikh Prothomaa Binte Minhaz</p>
+          <p class="pub-venue">2025 28th International Conference on Computer and Information Technology (ICCIT)</p>
+        </div>
+        <div class="pub-links"><a href="#" class="pub-link">DOI</a><a href="#" class="pub-link">PDF</a></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ AWARDS ============ -->
+<section class="section" id="awards">
+  <div class="container">
+    <p class="eyebrow reveal" data-reveal>Awards &amp; Certifications</p>
+    <h2 class="section-title reveal" data-reveal>Recognition</h2>
+
+    <div class="award-grid">
+      <div class="award-card reveal" data-reveal>
+        <span class="award-icon">🏆</span>
+        <span class="timeline-date">December 2025</span>
+        <h3>Top 2% Paper Award — IEEE ICCIT 2025</h3>
+        <p>Recognized among the top 2% of accepted papers at IEEE ICCIT 2025 for <em>CodeScent: A Deep Ensemble and LLM-Based Framework for Python and Java Code Smell Detection with Android Integration</em>.</p>
+      </div>
+      <div class="award-card reveal" data-reveal>
+        <span class="award-icon">📜</span>
+        <span class="timeline-date">October 2023</span>
+        <h3>ITEE FE Exam Certificate</h3>
+        <p>BCC &amp; ICT Division, Bangladesh.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LEADERSHIP ============ -->
+<section class="section section-tint" id="leadership">
+  <div class="container">
+    <p class="eyebrow reveal" data-reveal>Leadership &amp; Service</p>
+    <h2 class="section-title reveal" data-reveal>Beyond research</h2>
+
+    <div class="award-grid">
+      <div class="award-card reveal" data-reveal>
+        <span class="award-icon">🌐</span>
+        <span class="timeline-date">February 2026</span>
+        <h3>Web Development Volunteer</h3>
+        <p>Women Empowerment through ICT Workshop, Dept. of CSE, BUET — built and deployed the official workshop website on GitHub Pages and maintained event information with the organizing committee.</p>
+      </div>
+      <div class="award-card reveal" data-reveal>
+        <span class="award-icon">👥</span>
+        <span class="timeline-date">2023 — 2024</span>
+        <h3>Member, Bit2Byte</h3>
+        <p>Software Research &amp; Development Community, Dept. of CSE, KUET.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section class="section" id="skills">
+  <div class="container">
+    <p class="eyebrow reveal" data-reveal>Skills</p>
+    <h2 class="section-title reveal" data-reveal>Toolkit</h2>
+
+    <div class="skills-grid">
+      <div class="skill-group reveal" data-reveal>
+        <h3>Programming</h3>
+        <div class="tag-row"><span>C++</span><span>Python</span><span>Java</span><span>PHP</span><span>Assembly</span><span>Bash</span></div>
+      </div>
+      <div class="skill-group reveal" data-reveal>
+        <h3>Development Tools</h3>
+        <div class="tag-row"><span>Git</span><span>GitHub</span><span>Linux</span><span>LaTeX</span><span>Jupyter</span><span>Google Colab</span><span>Kaggle</span><span>VS Code</span><span>JetBrains</span></div>
+      </div>
+      <div class="skill-group reveal" data-reveal>
+        <h3>Database</h3>
+        <div class="tag-row"><span>MySQL</span><span>Oracle</span></div>
+      </div>
+      <div class="skill-group reveal" data-reveal>
+        <h3>Web Technologies</h3>
+        <div class="tag-row"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Bootstrap</span><span>PHP</span><span>Flask</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT / FOOTER ============ -->
+<footer class="footer" id="contact">
+  <div class="container footer-inner">
+    <div class="footer-copy reveal" data-reveal>
+      <p class="eyebrow">Get in touch</p>
+      <h2 class="section-title">Let's talk research.</h2>
+      <p>Open to collaboration, teaching opportunities, and conversations about HCI, XAI and bioinformatics.</p>
+      <a href="mailto:0424052087@grad.cse.buet.ac.bd" class="btn btn-primary footer-email">0424052087@grad.cse.buet.ac.bd</a>
+    </div>
+    <div class="footer-links reveal" data-reveal>
+      <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#" target="_blank" rel="noopener">Google Scholar</a>
+      <a href="#" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Shaikh Prothomaa Binte Minhaz. Built with care.</p>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   NAV: scrolled state + mobile toggle + active link
+   ========================================================= */
+const nav = document.getElementById('siteNav');
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+const scrollBar = document.getElementById('scrollBar');
+
+function onScroll() {
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 40);
+
+  // scroll progress
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (y / docHeight) * 100 : 0;
+  scrollBar.style.width = progress + '%';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+navToggle.addEventListener('click', () => {
+  const isOpen = navLinks.classList.toggle('open');
+  navToggle.classList.toggle('open', isOpen);
+  navToggle.setAttribute('aria-expanded', String(isOpen));
+});
+
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    navToggle.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  });
+});
+
+/* Active link highlight based on section in view */
+const sections = document.querySelectorAll('section[id]');
+const navAnchors = document.querySelectorAll('[data-nav]');
+
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.getAttribute('id');
+      navAnchors.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === `#${id}`);
+      });
+    }
+  });
+}, { rootMargin: '-45% 0px -50% 0px' });
+
+sections.forEach(s => navObserver.observe(s));
+
+/* =========================================================
+   SCROLL-TRIGGERED REVEAL (staggered)
+   ========================================================= */
+const revealEls = document.querySelectorAll('[data-reveal]');
+
+const groups = new Map();
+revealEls.forEach(el => {
+  const parent = el.closest('section') || document.body;
+  if (!groups.has(parent)) groups.set(parent, []);
+  groups.get(parent).push(el);
+});
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const siblings = groups.get(el.closest('section') || document.body) || [el];
+      const index = siblings.indexOf(el);
+      el.style.transitionDelay = `${Math.min(index, 8) * 70}ms`;
+      el.classList.add('in-view');
+      revealObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(el => revealObserver.observe(el));
+
+/* =========================================================
+   FULL-PAGE PARTICLE LAYER
+   Soft, glowing particles (pollen / light motes) drift slowly
+   across the entire page — fixed to the viewport, so they float
+   over the nature photo in the hero and the white canvas below
+   it alike. Purely decorative: low density, low opacity, and
+   fully paused under prefers-reduced-motion.
+   ========================================================= */
+(function pageParticles() {
+  const canvas = document.getElementById('particlesCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let w, h, dpr;
+  let particles = [];
+
+  const COLORS = ['#2f5bff', '#00d9e8', '#ff3d8a', '#ff7a45'];
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function makeParticle(randomY) {
+    return {
+      x: Math.random() * w,
+      y: randomY ? Math.random() * h : h + 20,
+      r: Math.random() * 2.6 + 1.4,
+      speed: Math.random() * 0.35 + 0.12,
+      drift: Math.random() * 0.6 - 0.3,
+      swayAmp: Math.random() * 18 + 6,
+      swaySpeed: Math.random() * 0.006 + 0.002,
+      swaySeed: Math.random() * 1000,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      alpha: Math.random() * 0.35 + 0.18
+    };
+  }
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const count = Math.max(26, Math.min(60, Math.floor((w * h) / 34000)));
+    particles = Array.from({ length: count }, () => makeParticle(true));
+  }
+
+  function step(t) {
+    ctx.clearRect(0, 0, w, h);
+
+    particles.forEach(p => {
+      if (!reduceMotion) {
+        p.y -= p.speed;
+        const sway = Math.sin((t || 0) * p.swaySpeed + p.swaySeed) * p.swayAmp * 0.02;
+        p.x += p.drift * 0.2 + sway;
+
+        if (p.y < -10) Object.assign(p, makeParticle(false));
+        if (p.x < -10) p.x = w + 10;
+        if (p.x > w + 10) p.x = -10;
+      }
+
+      ctx.beginPath();
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.alpha;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 8;
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.globalAlpha = 1;
+    });
+
+    requestAnimationFrame(step);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  requestAnimationFrame(step);
+})();
+
+/* Add active-link style hook (nav-links a.active) purely via class;
+   visual styling for .active can be extended in CSS if desired. */
+const navActiveStyle = document.createElement('style');
+navActiveStyle.textContent = `.nav-links a[data-nav].active { color: var(--ink); } .nav-links a[data-nav].active::after { width: 100%; }`;
+document.head.appendChild(navActiveStyle);
+
+</script>
+</body>
+</html>
